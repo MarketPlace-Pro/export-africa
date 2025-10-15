@@ -1,0 +1,80 @@
+.featured-suppliers {
+  padding: 5rem 0;
+  background: white;
+}
+
+.suppliers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.supplier-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  text-align: center;
+  box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+  border: 1px solid #f0f0f0;
+  transition: transform 0.3s ease;
+}
+
+.supplier-card:hover {
+  transform: translateY(-5px);
+}
+
+.supplier-avatar {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #2c5530, #4a7c59);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 auto 1rem;
+}
+
+.supplier-card h4 {
+  color: #2c5530;
+  margin-bottom: 1rem;
+}
+
+.supplier-products {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.product-tag {
+  background: #e8f5e8;
+  color: #2c5530;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+}
+
+.supplier-rating {
+  color: #ffa500;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.btn-view-profile {
+  background: #2c5530;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-view-profile:hover {
+  background: #1e3a24;
+}

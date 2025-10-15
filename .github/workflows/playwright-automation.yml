@@ -1,0 +1,180 @@
+name: 🚀 AfriTrade Daily Automation
+on:
+  schedule:
+    # Run daily at 6 AM UTC (8 AM South Africa time)
+    - cron: '0 6 * * *'
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  lead-generation:
+    name: 🔍 Generate Buyer Leads
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: 📦 Install Playwright & Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install playwright beautifulsoup4 requests pandas asyncio nest_asyncio
+        playwright install
+        playwright install-deps
+        
+    - name: 🎯 Run Lead Generator
+      run: |
+        python -c "
+import asyncio
+import json
+from datetime import datetime
+from playwright.async_api import async_playwright
+
+async def generate_leads():
+    print('🚀 Starting lead generation...')
+    results = {
+        'automation_run': datetime.now().isoformat(),
+        'leads': [],
+        'status': 'success'
+    }
+    
+    # Sample lead generation - replace with your actual logic
+    products = ['avocados', 'coffee', 'macadamia nuts', 'citrus', 'cocoa']
+    
+    for product in products:
+        results['leads'].append({
+            'product': product,
+            'buyers': [
+                {
+                    'company': f'Global {product.title()} Importers',
+                    'email': f'purchasing@global{product.replace(\" \", \"\")}.com',
+                    'country': 'Germany',
+                    'found_at': datetime.now().isoformat()
+                },
+                {
+                    'company': f'European {product.title()} Distributors',
+                    'email': f'buy@{product.replace(\" \", \"\")}europe.com',
+                    'country': 'France', 
+                    'found_at': datetime.now().isoformat()
+                }
+            ]
+        })
+        print(f'✅ Generated leads for {product}')
+    
+    # Save results
+    with open('leads_results.json', 'w') as f:
+        json.dump(results, f, indent=2)
+    
+    print(f'🎉 Generated {len(results[\"leads\"])} product categories')
+    return results
+
+# Run the automation
+asyncio.run(generate_leads())
+"
+        
+    - name: 💾 Upload Leads Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: daily-leads
+        path: leads_results.json
+        retention-days: 7
+        
+    - name: 📧 Notify Success
+      if: success()
+      run: |
+        echo "✅ AfriTrade automation completed successfully!"
+        echo "📊 Check the artifacts for generated leads"
+        
+  website-monitoring:
+    name: 🌐 Website Health Check
+    runs-on: ubuntu-latest
+    needs: lead-generation
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: 📦 Install Dependencies
+      run: |
+        pip install playwright requests
+        playwright install
+        
+    - name: 🏥 Test Website Health
+      run: |
+        python -c "
+import asyncio
+from playwright.async_api import async_playwright
+import json
+from datetime import datetime
+
+async def test_website():
+    print('🌐 Testing AfriTrade website...')
+    results = {
+        'timestamp': datetime.now().isoformat(),
+        'tests': {}
+    }
+    
+    async with async_playwright() as p:
+        browser = await p.chromium.launch()
+        page = await browser.new_page()
+        
+        # Test homepage
+        try:
+            await page.goto('https://afritrade-export.vercel.app', timeout=30000)
+            load_time = await page.evaluate('() => performance.timing.loadEventEnd - performance.timing.navigationStart')
+            results['tests']['homepage_load'] = {
+                'status': 'success',
+                'load_time_ms': load_time,
+                'url': 'https://afritrade-export.vercel.app'
+            }
+            print('✅ Homepage loaded successfully')
+        except Exception as e:
+            results['tests']['homepage_load'] = {
+                'status': 'failed',
+                'error': str(e)
+            }
+            print('❌ Homepage failed to load')
+        
+        # Test mobile menu
+        try:
+            await page.set_viewport_size({'width': 375, 'height': 812})
+            menu_button = await page.query_selector('[class*=\"menu\"], [class*=\"hamburger\"]')
+            if menu_button:
+                await menu_button.click()
+                await page.wait_for_timeout(1000)
+                results['tests']['mobile_menu'] = {'status': 'success'}
+                print('✅ Mobile menu test passed')
+            else:
+                results['tests']['mobile_menu'] = {'status': 'no_button_found'}
+        except Exception as e:
+            results['tests']['mobile_menu'] = {'status': 'failed', 'error': str(e)}
+        
+        await browser.close()
+    
+    # Save results
+    with open('website_health.json', 'w') as f:
+        json.dump(results, f, indent=2)
+    
+    print('📊 Website health check completed')
+    return results
+
+asyncio.run(test_website())
+"
+        
+    - name: 💾 Upload Health Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: website-health
+        path: website_health.json
+        retention-days: 30
+

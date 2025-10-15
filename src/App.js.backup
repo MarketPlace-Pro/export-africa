@@ -1,0 +1,59 @@
+import './App.css';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { CartProvider } from './CartContext';
+import { AuthProvider } from './AuthContext';
+
+// Components
+import Header from './components/Header';
+import Home from './Home';
+import Products from './Products';
+import BuyerRequest from './BuyerRequest';
+import Cart from './Cart';
+import AdminDashboard from './components/AdminDashboard';
+import ProductDetails from './components/ProductDetails';
+import SupplierApplication from './SupplierApplication';
+import Suppliers from './Suppliers';
+import Blog from './Blog';
+import About from './About';
+
+function Checkout() {
+  return (
+    <div className="container">
+      <div style={{ padding: '2rem 0' }}>
+        <h1>💰 Checkout</h1>
+        <p>Secure payment processing - Coming Soon</p>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <AuthProvider>
+      <CartProvider>
+        <Router>
+          <div className="App">
+            <Header />
+            <main>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/product/:id" element={<ProductDetails />} />
+                <Route path="/buyer-request" element={<BuyerRequest />} />
+                <Route path="/suppliers" element={<Suppliers />} />
+                <Route path="/supplier-application" element={<SupplierApplication />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout" element={<Checkout />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+              </Routes>
+            </main>
+          </div>
+        </Router>
+      </CartProvider>
+    </AuthProvider>
+  );
+}
+
+export default App;

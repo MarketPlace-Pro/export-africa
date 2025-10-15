@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /checkout
+
+Sitemap: https://afritrade-export.vercel.app/sitemap.xml
+
+# Crawl-delay: 10
+User-agent: GPTBot
+Disallow: /

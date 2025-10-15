@@ -1,0 +1,89 @@
+import React, { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useCart } from '../CartContext';
+import './Header.css';
+
+function Header() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { getCartItemsCount } = useCart();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const cartItemsCount = getCartItemsCount();
+
+  // Show cart indicator only on product and cart pages
+  const showCartIndicator = location.pathname === '/products' || location.pathname === '/cart';
+
+  const handleNavigation = (path) => {
+    navigate(path);
+    setIsMenuOpen(false);
+  };
+
+  return (
+    <header className="header">
+      <div className="header-container">
+        {/* Logo */}
+        <div className="logo" onClick={() => handleNavigation('/')}>
+          <div className="logo-icon">🌍</div>
+          <div className="logo-text">
+            <span className="logo-main">AFRITRADE</span>
+            <span className="logo-sub">GLOBAL</span>
+          </div>
+        </div>
+
+        {/* Desktop Navigation - IMPROVED FOR SEO */}
+        <nav className="nav-desktop">
+          <Link to="/" className="nav-link">Home</Link>
+          <Link to="/products" className="nav-link" title="Browse South African Fresh Produce">Products</Link>
+          <Link to="/suppliers" className="nav-link" title="Become a Verified Supplier">Suppliers</Link>
+          <Link to="/blog" className="nav-link" title="Export Insights & Market Trends">Blog</Link>
+          <Link to="/about" className="nav-link" title="About AfriTrade Global">About</Link>
+
+          <div className="nav-actions">
+            <Link to="/buyer-request" className="nav-btn nav-btn-primary">
+              Buyer Request
+            </Link>
+            <Link to="/cart" className="nav-btn nav-btn-cart">
+              🛒 Cart {showCartIndicator && cartItemsCount > 0 && (
+                <span className="cart-badge">{cartItemsCount}</span>
+              )}
+            </Link>
+          </div>
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="menu-toggle"
+          aria-label="Toggle navigation menu"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+
+        {/* Mobile Navigation */}
+        <nav className={`nav-mobile ${isMenuOpen ? 'nav-mobile-open' : ''}`}>
+          <Link to="/" className="nav-link" onClick={() => setIsMenuOpen(false)}>Home</Link>
+          <Link to="/products" className="nav-link" onClick={() => setIsMenuOpen(false)}>Products</Link>
+          <Link to="/suppliers" className="nav-link" onClick={() => setIsMenuOpen(false)}>Suppliers</Link>
+          <Link to="/blog" className="nav-link" onClick={() => setIsMenuOpen(false)}>Blog</Link>
+          <Link to="/about" className="nav-link" onClick={() => setIsMenuOpen(false)}>About</Link>
+
+          <div className="mobile-actions">
+            <Link to="/buyer-request" className="nav-btn nav-btn-primary" onClick={() => setIsMenuOpen(false)}>
+              Buyer Request
+            </Link>
+            <Link to="/cart" className="nav-btn nav-btn-cart" onClick={() => setIsMenuOpen(false)}>
+              🛒 Cart {showCartIndicator && cartItemsCount > 0 && (
+                <span className="cart-badge">{cartItemsCount}</span>
+              )}
+            </Link>
+          </div>
+        </nav>
+      </div>
+    </header>
+  );
+}
+
+export default Header;

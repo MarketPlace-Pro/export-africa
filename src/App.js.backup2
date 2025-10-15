@@ -1,0 +1,115 @@
+import './App.css';
+import { CartProvider, useCart } from './CartContext';
+import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
+import Home from './Home';
+import Products from './Products';
+import Suppliers from './Suppliers';
+import Cart from './Cart';
+import Blog from './Blog';
+import About from './About';
+import RealContactForm from './components/RealContactForm';
+import ProductDetail from './ProductDetail';
+import SupplierDashboard from './components/SupplierDashboard';
+import Checkout from './components/Checkout';
+
+function AppContent() {
+  const [currentPage, setCurrentPage] = useState('home');
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState(null);
+  const { getCartItemsCount } = useCart();
+  const navigate = useNavigate();
+
+  const handleNavigation = (page) => {
+    setCurrentPage(page);
+    navigate(page === 'home' ? '/' : `/${page}`);
+  };
+
+  const handleContactSupplier = (product) => {
+    setSelectedProduct(product);
+    setShowContactForm(true);
+  };
+
+  return (
+    <div className="App">
+      <header className="export-header">
+        <div className="container">
+          <div className="header-content">
+            <div className="logo-section">
+              <h1>🌍 AfriTrade Global</h1>
+              <p>Africa to World Export Platform</p>
+            </div>
+            <nav className="nav-links">
+              <button onClick={() => handleNavigation('home')}>Home</button>
+              <button onClick={() => handleNavigation('products')}>🇿🇦 Top Exports</button>
+              <button onClick={() => handleNavigation('suppliers')}>For Exporters</button>
+              <button onClick={() => handleNavigation('blog')}>📚 Blog</button>
+              <button onClick={() => handleNavigation('about')}>About</button>
+              <button onClick={() => handleNavigation('dashboard')}>🏭 Dashboard</button>
+              <button onClick={() => handleNavigation('cart')}>
+                🛒 Cart {getCartItemsCount() > 0 && <span className="cart-count">{getCartItemsCount()}</span>}
+              </button>
+              <button onClick={() => setShowContactForm(true)}>📞 Contact</button>
+            </nav>
+          </div>
+        </div>
+      </header>
+
+      <Routes>
+        <Route path="/" element={<Home setCurrentPage={setCurrentPage} />} />
+        <Route path="/products" element={<Products onContactSupplier={handleContactSupplier} />} />
+        <Route path="/product/:productId" element={<ProductDetail onContactSupplier={handleContactSupplier} />} />
+        <Route path="/suppliers" element={<Suppliers />} />
+        <Route path="/cart" element={<Cart setCurrentPage={setCurrentPage} />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/about" element={<About setCurrentPage={setCurrentPage} />} />
+        <Route path="/dashboard" element={<SupplierDashboard />} />
+        <Route path="/checkout" element={<Checkout />} />
+      </Routes>
+
+      {showContactForm && (
+        <RealContactForm 
+          product={selectedProduct} 
+          onClose={() => {
+            setShowContactForm(false);
+            setSelectedProduct(null);
+          }} 
+        />
+      )}
+
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-content">
+            <div className="footer-brand">
+              <h2>🌍 AfriTrade Global</h2>
+              <p>Africa to World Export Platform</p>
+            </div>
+            <div className="footer-links">
+              <button onClick={() => handleNavigation('about')}>About</button>
+              <button onClick={() => setShowContactForm(true)}>Contact</button>
+              <button>Privacy</button>
+              <button>Terms</button>
+              <button onClick={() => handleNavigation('blog')}>Blog</button>
+            </div>
+            <p className="footer-copyright">
+              &copy; 2024 AfriTrade Global. All rights reserved.<br />
+              Connecting African suppliers with global buyers.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <CartProvider>
+        <AppContent />
+      </CartProvider>
+    </Router>
+  );
+}
+
+export default App;

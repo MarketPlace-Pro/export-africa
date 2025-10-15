@@ -1,0 +1,306 @@
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import useSEO from './SEO';
+import './Home.css';
+
+function Home() {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  // Use SEO hook
+  useSEO({
+    title: "AfriTrade Global - Premium South African Fresh Produce Export Marketplace",
+    description: "Connect with 30+ verified South African fruit exporters. Source premium citrus, table grapes, avocados, and stone fruits for international markets. GlobalGAP certified, export-ready produce.",
+    keywords: "South African fruits, fresh produce export, citrus exporters, table grapes South Africa, avocado exporters, African agricultural exports, GlobalGAP certified fruits",
+    canonical: "https://afritrade-export.vercel.app/"
+  });
+
+  // ... (rest of your Home.js code remains exactly the same)
+  // Real agricultural and port images for hero carousel
+  const heroImages = [
+    {
+      url: 'https://images.unsplash.com/photo-1615485500310-4304fdaaef07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      title: 'Premium Citrus Fruits',
+      subtitle: 'Export-quality oranges, lemons, and grapefruit'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1544552866-d3ed42536d89?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      title: 'Modern Port Facilities',
+      subtitle: 'Efficient export logistics and handling'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      title: 'Fresh Table Grapes',
+      subtitle: 'Premium seedless varieties for global markets'
+    },
+    {
+      url: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80',
+      title: 'Quality Avocados',
+      subtitle: 'Hass and Fuerte varieties ready for export'
+    }
+  ];
+
+  // Auto-rotate hero images
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [heroImages.length]);
+
+  const featuredProducts = [
+    {
+      icon: '🍇',
+      name: 'Table Grapes',
+      description: 'Premium seedless varieties',
+      image: 'https://images.unsplash.com/photo-1619566636858-adf3ef46400b?w=400&h=300&fit=crop'
+    },
+    {
+      icon: '🍊',
+      name: 'Citrus Fruits',
+      description: 'Oranges, Lemons, Grapefruit',
+      image: 'https://images.unsplash.com/photo-1615485500310-4304fdaaef07?w=400&h=300&fit=crop'
+    },
+    {
+      icon: '🥑',
+      name: 'Avocados',
+      description: 'Hass and Fuerte varieties',
+      image: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400&h=300&fit=crop'
+    },
+    {
+      icon: '🍓',
+      name: 'Berries',
+      description: 'Strawberries, Blueberries',
+      image: 'https://images.unsplash.com/photo-1464454709131-ffd692591ee5?w=400&h=300&fit=crop'
+    },
+    {
+      icon: '🍑',
+      name: 'Stone Fruits',
+      description: 'Peaches, Plums, Nectarines',
+      image: 'https://images.unsplash.com/photo-1574856344991-aaa31b6f4ce3?w=400&h=300&fit=crop'
+    },
+    {
+      icon: '🍈',
+      name: 'Melons',
+      description: 'Watermelons, Cantaloupes',
+      image: 'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=400&h=300&fit=crop'
+    }
+  ];
+
+  const stats = [
+    { number: '30+', label: 'Verified Exporters' },
+    { number: '50+', label: 'Monthly Buyer Requests' },
+    { number: '15+', label: 'Countries Served' },
+    { number: '100%', label: 'Quality Assured' }
+  ];
+
+  const processSteps = [
+    {
+      icon: '📝',
+      title: 'Submit Requirement',
+      description: 'Tell us what fruits you need and quantity requirements'
+    },
+    {
+      icon: '🤝',
+      title: 'Get Matched',
+      description: 'We connect you with verified South African exporters'
+    },
+    {
+      icon: '💰',
+      title: 'Receive Quotes',
+      description: 'Compare competitive offers and request samples'
+    },
+    {
+      icon: '🚢',
+      title: 'Export Execution',
+      description: 'We handle all logistics and export documentation'
+    }
+  ];
+
+  return (
+    <div className="home-page">
+      {/* Animated Hero Section with Carousel */}
+      <section className="hero-section">
+        <div className="hero-carousel">
+          {heroImages.map((image, index) => (
+            <div
+              key={index}
+              className={`hero-slide ${index === currentSlide ? 'active' : ''}`}
+              style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url(${image.url})` }}
+            >
+              <div className="hero-content">
+                <h1 className="hero-title">
+                  South Africa's Digital Fresh Produce Export Platform
+                </h1>
+                <p className="hero-subtitle">
+                  Connecting Global Buyers with Premium South African Fruits
+                </p>
+                <div className="image-caption">
+                  <h3>{image.title}</h3>
+                  <p>{image.subtitle}</p>
+                </div>
+                
+                <div className="trust-badges">
+                  <span>🌍 30+ Verified Exporters</span>
+                  <span>🚢 50+ Active Buyers</span>
+                  <span>✅ Quality Assured</span>
+                  <span>📦 Export Ready</span>
+                </div>
+
+                <div className="cta-buttons">
+                  <Link to="/buyer-request" className="btn btn-primary btn-large">
+                    Source South African Fruits →
+                  </Link>
+                  <Link to="/suppliers" className="btn btn-secondary btn-large">
+                    I'm a Supplier - Get Buyers
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Hero Indicators */}
+        <div className="hero-indicators">
+          {heroImages.map((_, index) => (
+            <button
+              key={index}
+              className={`indicator ${index === currentSlide ? 'active' : ''}`}
+              onClick={() => setCurrentSlide(index)}
+            />
+          ))}
+        </div>
+      </section>
+
+      {/* Stats Section */}
+      <section className="stats-section">
+        <div className="container">
+          <div className="stats-grid">
+            {stats.map((stat, index) => (
+              <div key={index} className="stat-card">
+                <h3 className="stat-number">{stat.number}</h3>
+                <p className="stat-label">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Products Gallery */}
+      <section className="products-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>Premium South African Produce</h2>
+            <p>Export-quality fruits from verified South African growers</p>
+          </div>
+          
+          <div className="products-grid">
+            {featuredProducts.map((product, index) => (
+              <div key={index} className="product-card">
+                <div className="product-image">
+                  <img src={product.image} alt={product.name} />
+                  <div className="product-overlay">
+                    <span className="product-icon">{product.icon}</span>
+                  </div>
+                </div>
+                <div className="product-content">
+                  <h3>{product.name}</h3>
+                  <p>{product.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="section-cta">
+            <Link to="/products" className="btn btn-outline">
+              View All Products & Export Options
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* How It Works */}
+      <section className="process-section">
+        <div className="container">
+          <div className="section-header">
+            <h2>Streamlined Export Process</h2>
+            <p>From farm to global market - simplified and efficient</p>
+          </div>
+          
+          <div className="process-steps">
+            {processSteps.map((step, index) => (
+              <div key={index} className="process-step">
+                <div className="step-number">0{index + 1}</div>
+                <div className="step-icon">{step.icon}</div>
+                <h3>{step.title}</h3>
+                <p>{step.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trust Section with Real Port Images */}
+      <section className="trust-section">
+        <div className="trust-background">
+          <div className="trust-overlay">
+            <div className="container">
+              <div className="trust-content">
+                <h2>Trusted by International Buyers Worldwide</h2>
+                <p>Exporting premium South African produce to global markets with guaranteed quality and reliability</p>
+                
+                <div className="trust-countries">
+                  <span>🇰🇼 Kuwait</span>
+                  <span>🇳🇱 Netherlands</span>
+                  <span>🇶🇦 Qatar</span>
+                  <span>🇦🇪 UAE</span>
+                  <span>🇸🇦 Saudi Arabia</span>
+                  <span>🇬🇧 United Kingdom</span>
+                  <span>🇩🇪 Germany</span>
+                  <span>🇫🇷 France</span>
+                </div>
+
+                <div className="port-facilities">
+                  <div className="port-card">
+                    <img src="https://images.unsplash.com/photo-1544552866-d3ed42536d89?w=400&h=300&fit=crop" alt="Port Facility" />
+                    <h4>Modern Port Facilities</h4>
+                    <p>State-of-the-art cold storage and handling</p>
+                  </div>
+                  <div className="port-card">
+                    <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=400&h=300&fit=crop" alt="Shipping" />
+                    <h4>Global Logistics</h4>
+                    <p>Efficient shipping to international markets</p>
+                  </div>
+                  <div className="port-card">
+                    <img src="https://images.unsplash.com/photo-1586771107445-d3ca888129ff?w=400&h=300&fit=crop" alt="Quality Control" />
+                    <h4>Quality Assurance</h4>
+                    <p>Rigorous quality control and certification</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Final CTA Section */}
+      <section className="cta-section">
+        <div className="container">
+          <div className="cta-content">
+            <h2>Ready to Source Premium South African Fruits?</h2>
+            <p>Join international buyers who trust AfriTrade for quality produce and seamless export experience</p>
+            <div className="cta-buttons">
+              <Link to="/buyer-request" className="btn btn-primary btn-large">
+                Submit Your Requirement
+              </Link>
+              <Link to="/contact" className="btn btn-secondary">
+                Contact Our Export Team
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+export default Home;
