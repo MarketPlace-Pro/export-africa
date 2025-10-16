@@ -2,10 +2,10 @@ import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppDataProvider } from './AppDataContext.js';
 import Header from './components/Header';
-import Home from './Home';  // FIXED: Regular import instead of lazy
 import './App.css';
 
-// Lazy load other components for better performance
+// Lazy load components for better performance
+const Home = lazy(() => import('./Home'));
 const Products = lazy(() => import('./Products'));
 const Blog = lazy(() => import('./Blog'));
 const About = lazy(() => import('./About'));

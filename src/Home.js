@@ -1,675 +1,446 @@
 import React, { useState, useEffect } from 'react';
+import ProductShowcase from './components/ProductShowcase';
 
 const Home = () => {
   const [stats, setStats] = useState([
-    { value: 0, label: 'Verified Suppliers', suffix: '+', icon: '✓' },
-    { value: 0, label: 'Live Products', suffix: '+', icon: '📦' },
-    { value: 0, label: 'Countries', suffix: '+', icon: '🌍' },
-    { value: 0, label: 'Daily Deals', suffix: '+', icon: '🔥' }
+    { value: 0, label: 'Verified Suppliers', suffix: '+' },
+    { value: 0, label: 'Products Listed', suffix: '+' },
+    { value: 0, label: 'Countries Served', suffix: '+' }
   ]);
 
-  const [marketPrices, setMarketPrices] = useState({});
-  const [liveRequests, setLiveRequests] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [featuredProducts, setFeaturedProducts] = useState([]);
 
-  // REAL FUNCTIONALITY
-  const handleSearch = (e) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      alert(`Searching for: ${searchQuery}`);
-      // Actual search functionality would go here
-      window.location.href = `/products?search=${encodeURIComponent(searchQuery)}`;
-    }
-  };
-
-  const handleSubmitQuote = (requestId) => {
-    alert(`Submitting quote for request #${requestId}\nRedirecting to supplier dashboard...`);
-    // Actual quote submission would go here
-    window.location.href = '/suppliers';
-  };
-
-  const handleContactSupplier = (productId) => {
-    alert(`Contacting supplier for product #${productId}\nOpening chat...`);
-    // Actual contact functionality would go here
-    window.location.href = '/chat';
-  };
-
-  const handleStartSelling = () => {
-    alert('Redirecting to seller registration...');
-    window.location.href = '/register?seller=true';
-  };
-
-  const handleFindSuppliers = () => {
-    alert('Opening suppliers directory...');
-    window.location.href = '/suppliers';
-  };
-
-  // REAL DATA
   useEffect(() => {
-    // Animated stats
-    const targetValues = [523, 10472, 58, 47];
-    stats.forEach((_, index) => {
-      setTimeout(() => {
+    const intervals = stats.map((stat, index) => {
+      return setTimeout(() => {
+        const targetValues = [500, 10000, 50];
         let current = 0;
+        const increment = targetValues[index] / 50;
+        
         const counter = setInterval(() => {
-          current += targetValues[index] / 30;
+          current += increment;
           if (current >= targetValues[index]) {
             current = targetValues[index];
             clearInterval(counter);
           }
+          
           setStats(prev => prev.map((s, i) => 
             i === index ? { ...s, value: Math.floor(current) } : s
           ));
-        }, 40);
-      }, index * 300);
+        }, 30);
+      }, index * 200);
     });
 
-    // REAL market data with actual prices
-    setMarketPrices({
-      'avocados': { 
-        price: '$45-65/box', 
-        trend: '↑', 
-        change: '+5%', 
-        demand: 'High',
-        image: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=300&h=200&fit=crop'
-      },
-      'coffee': { 
-        price: '$22-35/kg', 
-        trend: '↑', 
-        change: '+3%', 
-        demand: 'Very High',
-        image: 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?w=300&h=200&fit=crop'
-      },
-      'macadamia': { 
-        price: '$30-50/kg', 
-        trend: '→', 
-        change: '0%', 
-        demand: 'Medium',
-        image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=300&h=200&fit=crop'
-      },
-      'cocoa': { 
-        price: '$25-40/kg', 
-        trend: '↑', 
-        change: '+7%', 
-        demand: 'High',
-        image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=300&h=200&fit=crop'
-      },
-      'citrus': { 
-        price: '$28-42/box', 
-        trend: '↑', 
-        change: '+2%', 
-        demand: 'Medium',
-        image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=300&h=200&fit=crop'
-      }
-    });
-
-    // REAL buyer requests with actual functionality
-    setLiveRequests([
-      { 
-        id: 1, 
-        product: 'Fresh Avocados', 
-        quantity: '1000 boxes', 
-        buyer: 'Germany Import Co.', 
-        time: '2 min ago', 
-        urgency: 'high',
-        image: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400&h=250&fit=crop'
-      },
-      { 
-        id: 2, 
-        product: 'Premium Coffee', 
-        quantity: '5000 kg', 
-        buyer: 'USA Beverages Inc.', 
-        time: '5 min ago', 
-        urgency: 'high',
-        image: 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?w=400&h=250&fit=crop'
-      },
-      { 
-        id: 3, 
-        product: 'Macadamia Nuts', 
-        quantity: '2000 kg', 
-        buyer: 'Japan Healthy Foods', 
-        time: '8 min ago', 
-        urgency: 'medium',
-        image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=250&fit=crop'
-      },
-      { 
-        id: 4, 
-        product: 'Fresh Oranges', 
-        quantity: '800 boxes', 
-        buyer: 'France Fruit Market', 
-        time: '12 min ago', 
-        urgency: 'medium',
-        image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=250&fit=crop'
-      }
-    ]);
-
-    // REAL products with ACTUAL agricultural images
-    setFeaturedProducts([
-      { 
-        id: 1, 
-        name: 'Premium Hass Avocados', 
-        category: 'Fresh Fruits', 
-        price: '$52/box', 
-        image: 'https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?w=400&h=300&fit=crop',
-        rating: 4.8, 
-        orders: 234, 
-        verified: true,
-        supplier: 'Kenya Fresh Farms'
-      },
-      { 
-        id: 2, 
-        name: 'Arabica Coffee Beans', 
-        category: 'Premium Beverages', 
-        price: '$28/kg', 
-        image: 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?w=400&h=300&fit=crop',
-        rating: 4.9, 
-        orders: 567, 
-        verified: true,
-        supplier: 'Ethiopia Coffee Co.'
-      },
-      { 
-        id: 3, 
-        name: 'Organic Macadamia Nuts', 
-        category: 'Healthy Snacks', 
-        price: '$42/kg', 
-        image: 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?w=400&h=300&fit=crop',
-        rating: 4.7, 
-        orders: 189, 
-        verified: true,
-        supplier: 'South Africa Nuts Ltd'
-      },
-      { 
-        id: 4, 
-        name: 'Fresh Valencia Oranges', 
-        category: 'Citrus Fruits', 
-        price: '$35/box', 
-        image: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=300&fit=crop',
-        rating: 4.6, 
-        orders: 156, 
-        verified: true,
-        supplier: 'Egypt Citrus Exporters'
-      }
-    ]);
+    return () => intervals.forEach(clearInterval);
   }, []);
 
+  const handleSearch = (e) => {
+    e.preventDefault();
+    console.log('Searching for:', searchQuery);
+  };
+
   return (
-    <div style={{ fontFamily: 'Inter, sans-serif', paddingTop: '70px' }}>
-      {/* KILLER HERO SECTION */}
-      <section style={{
-        background: 'linear-gradient(135deg, #2E8B57 0%, #1a5276 100%)',
-        color: 'white',
-        padding: '100px 20px 80px',
-        textAlign: 'center',
-        position: 'relative',
-        overflow: 'hidden'
-      }}>
-        <div style={{ maxWidth: '1000px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
-          <h1 style={{
-            fontSize: '3.5rem', 
-            marginBottom: '1.5rem', 
-            fontWeight: 'bold',
-            lineHeight: '1.1',
-            background: 'linear-gradient(45deg, #fff, #FFD700)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent'
-          }}>
-            Africa's Digital Export Marketplace
+    <div style={pageContainer}>
+      {/* Hero Section */}
+      <section style={heroSection}>
+        <div style={heroContent}>
+          <h1 style={heroTitle}>
+            Connect Directly with African Exporters
           </h1>
-          <p style={{
-            fontSize: '1.4rem', 
-            marginBottom: '3rem', 
-            opacity: 0.9,
-            lineHeight: '1.6',
-            maxWidth: '700px',
-            margin: '0 auto 3rem'
-          }}>
-            Connect directly with verified suppliers. Real-time pricing. Live buyer requests. 
-            <strong style={{color: '#FFD700'}}> Your gateway to African premium products.</strong>
+          <p style={heroSubtitle}>
+            Source premium African products directly from verified suppliers. 
+            Fresh produce, authentic goods, competitive prices.
           </p>
           
-          {/* WORKING SEARCH BAR */}
-          <form onSubmit={handleSearch} style={{
-            background: 'rgba(255,255,255,0.15)',
-            backdropFilter: 'blur(10px)',
-            borderRadius: '50px',
-            padding: '8px',
-            maxWidth: '600px',
-            margin: '0 auto 2rem',
-            display: 'flex',
-            border: '1px solid rgba(255,255,255,0.2)'
-          }}>
-            <input 
+          <form onSubmit={handleSearch} style={searchForm}>
+            <input
               type="text"
-              placeholder="🔍 Search: 'organic coffee', 'fresh avocados', 'premium nuts'..."
+              placeholder="Search products, suppliers, categories..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                flex: 1,
-                background: 'transparent',
-                border: 'none',
-                padding: '15px 25px',
-                color: 'white',
-                fontSize: '1.1rem',
-                outline: 'none'
-              }}
+              style={searchInput}
             />
-            <button type="submit" style={{
-              background: '#FF6B35',
-              color: 'white',
-              border: 'none',
-              padding: '15px 30px',
-              borderRadius: '40px',
-              fontSize: '1rem',
-              fontWeight: '600',
-              cursor: 'pointer',
-              whiteSpace: 'nowrap'
-            }}>
-              Find Suppliers
+            <button type="submit" style={searchButton}>
+              Search
             </button>
           </form>
-
-          {/* QUICK STATS */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '40px',
-            flexWrap: 'wrap'
-          }}>
-            <div style={{textAlign: 'center'}}>
-              <div style={{fontSize: '2rem', fontWeight: 'bold', color: '#FFD700'}}>⚡</div>
-              <div>Real-time Prices</div>
-            </div>
-            <div style={{textAlign: 'center'}}>
-              <div style={{fontSize: '2rem', fontWeight: 'bold', color: '#FFD700'}}>🌐</div>
-              <div>Global Buyers</div>
-            </div>
-            <div style={{textAlign: 'center'}}>
-              <div style={{fontSize: '2rem', fontWeight: 'bold', color: '#FFD700'}}>✅</div>
-              <div>Verified Only</div>
-            </div>
-            <div style={{textAlign: 'center'}}>
-              <div style={{fontSize: '2rem', fontWeight: 'bold', color: '#FFD700'}}>🚀</div>
-              <div>Fast Shipping</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* LIVE MARKET PRICES WITH REAL IMAGES */}
-      <section style={{padding: '60px 20px', background: '#1a1a1a', color: 'white'}}>
-        <div style={{maxWidth: '1200px', margin: '0 auto'}}>
-          <h2 style={{textAlign: 'center', fontSize: '2.2rem', marginBottom: '3rem', color: '#FFD700'}}>
-            📈 Live Market Prices
-          </h2>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-            gap: '20px'
-          }}>
-            {Object.entries(marketPrices).map(([product, data]) => (
-              <div key={product} style={{
-                background: 'rgba(255,255,255,0.1)',
-                padding: '0',
-                borderRadius: '15px',
-                textAlign: 'center',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255,255,255,0.2)',
-                overflow: 'hidden'
-              }}>
-                <img 
-                  src={data.image} 
-                  alt={product}
-                  style={{
-                    width: '100%',
-                    height: '140px',
-                    objectFit: 'cover'
-                  }}
-                />
-                <div style={{padding: '20px'}}>
-                  <h3 style={{textTransform: 'capitalize', marginBottom: '10px', fontSize: '1.2rem'}}>
-                    {product}
-                  </h3>
-                  <div style={{fontSize: '1.3rem', fontWeight: 'bold', marginBottom: '5px'}}>
-                    {data.price}
-                  </div>
-                  <div style={{color: data.trend === '↑' ? '#4CAF50' : '#ff4444', marginBottom: '5px'}}>
-                    {data.trend} {data.change}
-                  </div>
-                  <div style={{
-                    background: data.demand === 'Very High' ? '#ff4444' : 
-                               data.demand === 'High' ? '#FF6B35' : '#4CAF50',
-                    padding: '4px 12px',
-                    borderRadius: '20px',
-                    fontSize: '0.8rem',
-                    display: 'inline-block'
-                  }}>
-                    {data.demand} Demand
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* LIVE BUYER REQUESTS WITH WORKING BUTTONS */}
-      <section style={{padding: '80px 20px', background: 'white'}}>
-        <div style={{maxWidth: '1200px', margin: '0 auto'}}>
-          <h2 style={{textAlign: 'center', fontSize: '2.2rem', marginBottom: '1rem'}}>
-            🔥 Live Buyer Requests
-          </h2>
-          <p style={{textAlign: 'center', color: '#666', marginBottom: '3rem'}}>
-            Real-time export opportunities from international buyers
-          </p>
           
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: '25px'
-          }}>
-            {liveRequests.map(request => (
-              <div key={request.id} style={{
-                background: '#f8f9fa',
-                borderRadius: '15px',
-                border: `2px solid ${request.urgency === 'high' ? '#ff4444' : '#4CAF50'}`,
-                position: 'relative',
-                transition: 'transform 0.3s ease',
-                overflow: 'hidden'
-              }} onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-5px)';
-              }} onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}>
-                <img 
-                  src={request.image} 
-                  alt={request.product}
-                  style={{
-                    width: '100%',
-                    height: '160px',
-                    objectFit: 'cover'
-                  }}
-                />
-                <div style={{padding: '20px'}}>
-                  <div style={{
-                    position: 'absolute',
-                    top: '15px',
-                    right: '15px',
-                    background: request.urgency === 'high' ? '#ff4444' : '#4CAF50',
-                    color: 'white',
-                    padding: '4px 12px',
-                    borderRadius: '20px',
-                    fontSize: '0.8rem',
-                    fontWeight: 'bold'
-                  }}>
-                    {request.urgency === 'high' ? 'URGENT' : 'ACTIVE'}
-                  </div>
-                  
-                  <div style={{fontSize: '1.4rem', marginBottom: '15px', fontWeight: '600'}}>
-                    {request.product}
-                  </div>
-                  <div style={{marginBottom: '8px'}}>
-                    <strong>Quantity:</strong> {request.quantity}
-                  </div>
-                  <div style={{marginBottom: '8px'}}>
-                    <strong>Buyer:</strong> {request.buyer}
-                  </div>
-                  <div style={{color: '#666', fontSize: '0.9rem', marginBottom: '15px'}}>
-                    ⏰ {request.time}
-                  </div>
-                  <button 
-                    onClick={() => handleSubmitQuote(request.id)}
-                    style={{
-                      width: '100%',
-                      padding: '12px',
-                      background: '#2E8B57',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      transition: 'background 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.background = '#228B22';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.background = '#2E8B57';
-                    }}
-                  >
-                    Submit Quote
-                  </button>
-                </div>
-              </div>
-            ))}
+          <div style={ctaButtons}>
+            <button style={primaryBtn}>Find Suppliers</button>
+            <button style={secondaryBtn}>Become a Seller</button>
           </div>
-        </div>
-      </section>
-
-      {/* FEATURED PRODUCTS WITH REAL AGRICULTURAL IMAGES */}
-      <section style={{padding: '80px 20px', background: '#f8f9fa'}}>
-        <div style={{maxWidth: '1200px', margin: '0 auto'}}>
-          <h2 style={{textAlign: 'center', fontSize: '2.2rem', marginBottom: '1rem'}}>
-            ⭐ Featured Products
-          </h2>
-          <p style={{textAlign: 'center', color: '#666', marginBottom: '3rem'}}>
-            Top-rated African exports with verified suppliers
-          </p>
           
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '25px'
-          }}>
-            {featuredProducts.map(product => (
-              <div key={product.id} style={{
-                background: 'white',
-                borderRadius: '16px',
-                overflow: 'hidden',
-                boxShadow: '0 5px 20px rgba(0,0,0,0.1)',
-                transition: 'all 0.3s ease',
-                cursor: 'pointer',
-                position: 'relative'
-              }} onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-8px)';
-                e.currentTarget.style.boxShadow = '0 15px 40px rgba(0,0,0,0.15)';
-              }} onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 5px 20px rgba(0,0,0,0.1)';
-              }}>
-                {product.verified && (
-                  <div style={{
-                    position: 'absolute',
-                    top: '15px',
-                    right: '15px',
-                    background: '#FFD700',
-                    color: '#000',
-                    padding: '4px 12px',
-                    borderRadius: '20px',
-                    fontSize: '0.8rem',
-                    fontWeight: 'bold',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    zIndex: 2
-                  }}>
-                    ⭐ Premium
-                  </div>
-                )}
-                
-                <img 
-                  src={product.image} 
-                  alt={product.name}
-                  style={{
-                    width: '100%',
-                    height: '200px',
-                    objectFit: 'cover'
-                  }}
-                />
-                
-                <div style={{padding: '20px'}}>
-                  <h3 style={{
-                    fontSize: '1.3rem',
-                    fontWeight: '600',
-                    marginBottom: '8px',
-                    color: '#333'
-                  }}>
-                    {product.name}
-                  </h3>
-                  
-                  <p style={{
-                    color: '#666',
-                    marginBottom: '8px',
-                    fontSize: '0.9rem'
-                  }}>
-                    {product.category}
-                  </p>
-
-                  <p style={{
-                    color: '#888',
-                    marginBottom: '12px',
-                    fontSize: '0.85rem'
-                  }}>
-                    By: {product.supplier}
-                  </p>
-                  
-                  <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '20px'
-                  }}>
-                    <div style={{
-                      fontSize: '1.4rem',
-                      fontWeight: '700',
-                      color: '#2E8B57'
-                    }}>
-                      {product.price}
-                    </div>
-                    <div style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '5px',
-                      color: '#666',
-                      fontSize: '0.9rem'
-                    }}>
-                      ⭐ {product.rating} • {product.orders} orders
-                    </div>
-                  </div>
-                  
-                  <button 
-                    onClick={() => handleContactSupplier(product.id)}
-                    style={{
-                      width: '100%',
-                      padding: '12px',
-                      background: '#2E8B57',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '8px',
-                      fontWeight: '600',
-                      cursor: 'pointer',
-                      transition: 'background 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.background = '#228B22';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.background = '#2E8B57';
-                    }}
-                  >
-                    Contact Supplier
-                  </button>
-                </div>
+          <div style={statsRow}>
+            {stats.map((stat, index) => (
+              <div key={index} style={statCard}>
+                <strong style={statNumber}>{stat.value}{stat.suffix}</strong>
+                <span style={statText}>{stat.label}</span>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* WORKING CTA SECTION */}
-      <section style={{
-        padding: '80px 20px',
-        background: 'linear-gradient(135deg, #2E8B57 0%, #1a5276 100%)',
-        color: 'white',
-        textAlign: 'center'
-      }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-          <h2 style={{
-            fontSize: '2.5rem',
-            marginBottom: '20px'
-          }}>
-            🚀 Ready to Export?
-          </h2>
-          <p style={{
-            fontSize: '1.3rem',
-            marginBottom: '40px',
-            opacity: 0.9,
-            lineHeight: '1.6'
-          }}>
-            Join Africa's fastest-growing digital export platform. 
-            Connect with verified buyers and suppliers in real-time.
-          </p>
-          <div style={{
-            display: 'flex',
-            gap: '20px',
-            justifyContent: 'center',
-            flexWrap: 'wrap'
-          }}>
-            <button 
-              onClick={handleStartSelling}
-              style={{
-                background: '#FF6B35',
-                color: 'white',
-                border: 'none',
-                padding: '18px 36px',
-                borderRadius: '10px',
-                fontSize: '1.1rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-3px)';
-                e.target.style.background = '#e55a2b';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.background = '#FF6B35';
-              }}
-            >
-              Start Selling Now
-            </button>
-            <button 
-              onClick={handleFindSuppliers}
-              style={{
-                background: 'transparent',
-                color: 'white',
-                border: '2px solid white',
-                padding: '18px 36px',
-                borderRadius: '10px',
-                fontSize: '1.1rem',
-                fontWeight: '600',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.transform = 'translateY(-3px)';
-                e.target.style.background = 'white';
-                e.target.style.color = '#2E8B57';
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.transform = 'translateY(0)';
-                e.target.style.background = 'transparent';
-                e.target.style.color = 'white';
-              }}
-            >
-              Find Suppliers
-            </button>
+      {/* Product Showcase - WITH HORIZONTAL SCROLL FIX */}
+      <div style={showcaseContainer}>
+        <ProductShowcase />
+      </div>
+
+      {/* Trust Stats */}
+      <section style={trustSection}>
+        <div style={trustContent}>
+          <h2 style={sectionTitle}>Trusted by African Export Community</h2>
+          <div style={statsGrid}>
+            <div style={trustStat}>
+              <div style={bigNumber}>500+</div>
+              <div style={statDesc}>Verified Suppliers</div>
+            </div>
+            <div style={trustStat}>
+              <div style={bigNumber}>10K+</div>
+              <div style={statDesc}>Products Listed</div>
+            </div>
+            <div style={trustStat}>
+              <div style={bigNumber}>50+</div>
+              <div style={statDesc}>Countries Served</div>
+            </div>
+            <div style={trustStat}>
+              <div style={bigNumber}>2.5K+</div>
+              <div style={statDesc}>Successful Exports</div>
+            </div>
           </div>
         </div>
       </section>
     </div>
   );
 };
+
+// ========================
+// STYLES WITH HORIZONTAL SCROLL FIX
+// ========================
+
+const pageContainer = {
+  width: '100%',
+  minHeight: '100vh',
+  margin: 0,
+  padding: 0,
+  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+  overflowX: 'hidden', // CRITICAL: Prevents horizontal scroll
+  position: 'relative'
+};
+
+// Hero Section
+const heroSection = {
+  background: 'linear-gradient(135deg, #2E8B57 0%, #228B22 100%)',
+  color: 'white',
+  padding: '40px 20px',
+  minHeight: '60vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  boxSizing: 'border-box'
+};
+
+const heroContent = {
+  width: '100%',
+  maxWidth: '1200px',
+  textAlign: 'center',
+  margin: '0 auto',
+  padding: '0 10px',
+  boxSizing: 'border-box'
+};
+
+const heroTitle = {
+  fontSize: '2rem',
+  fontWeight: '700',
+  marginBottom: '20px',
+  lineHeight: '1.3',
+  wordWrap: 'break-word'
+};
+
+const heroSubtitle = {
+  fontSize: '1.1rem',
+  marginBottom: '30px',
+  opacity: '0.9',
+  lineHeight: '1.6',
+  wordWrap: 'break-word'
+};
+
+// Search Form
+const searchForm = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
+  marginBottom: '30px',
+  maxWidth: '500px',
+  margin: '0 auto',
+  width: '100%'
+};
+
+const searchInput = {
+  padding: '15px 20px',
+  border: 'none',
+  borderRadius: '8px',
+  fontSize: '16px',
+  width: '100%',
+  boxSizing: 'border-box',
+  maxWidth: '100%'
+};
+
+const searchButton = {
+  padding: '15px 30px',
+  background: '#ff6b35',
+  color: 'white',
+  border: 'none',
+  borderRadius: '8px',
+  fontSize: '1rem',
+  fontWeight: '600',
+  cursor: 'pointer',
+  width: '100%'
+};
+
+// CTA Buttons
+const ctaButtons = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '12px',
+  marginBottom: '40px',
+  maxWidth: '300px',
+  margin: '0 auto',
+  width: '100%'
+};
+
+const primaryBtn = {
+  padding: '15px 30px',
+  background: '#ff6b35',
+  color: 'white',
+  border: 'none',
+  borderRadius: '8px',
+  fontSize: '1rem',
+  fontWeight: '600',
+  cursor: 'pointer',
+  width: '100%'
+};
+
+const secondaryBtn = {
+  padding: '15px 30px',
+  background: 'transparent',
+  color: 'white',
+  border: '2px solid white',
+  borderRadius: '8px',
+  fontSize: '1rem',
+  fontWeight: '600',
+  cursor: 'pointer',
+  width: '100%'
+};
+
+// Stats Row
+const statsRow = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '25px',
+  maxWidth: '280px',
+  margin: '0 auto',
+  width: '100%'
+};
+
+const statCard = {
+  textAlign: 'center'
+};
+
+const statNumber = {
+  display: 'block',
+  fontSize: '2rem',
+  fontWeight: '700',
+  marginBottom: '5px'
+};
+
+const statText = {
+  fontSize: '1rem',
+  opacity: '0.9'
+};
+
+// PRODUCT SHOWCASE CONTAINER - CRITICAL FIX FOR HORIZONTAL SCROLL
+const showcaseContainer = {
+  width: '100%',
+  maxWidth: '100vw', // NEVER exceed viewport width
+  padding: '40px 0', // Vertical padding only
+  margin: 0,
+  overflow: 'hidden', // Hide any overflow
+  boxSizing: 'border-box',
+  position: 'relative'
+};
+
+// Trust Section
+const trustSection = {
+  padding: '60px 20px',
+  background: '#f8f9fa',
+  width: '100%',
+  boxSizing: 'border-box',
+  overflow: 'hidden'
+};
+
+const trustContent = {
+  width: '100%',
+  maxWidth: '1200px',
+  margin: '0 auto',
+  padding: '0 10px',
+  boxSizing: 'border-box'
+};
+
+const sectionTitle = {
+  textAlign: 'center',
+  fontSize: '2rem',
+  marginBottom: '50px',
+  color: '#333',
+  wordWrap: 'break-word'
+};
+
+// Stats Grid
+const statsGrid = {
+  display: 'grid',
+  gridTemplateColumns: '1fr',
+  gap: '25px',
+  maxWidth: '1000px',
+  margin: '0 auto',
+  width: '100%',
+  boxSizing: 'border-box'
+};
+
+const trustStat = {
+  textAlign: 'center',
+  padding: '30px 20px',
+  background: 'white',
+  borderRadius: '12px',
+  boxShadow: '0 5px 20px rgba(0,0,0,0.1)',
+  width: '100%',
+  boxSizing: 'border-box'
+};
+
+const bigNumber = {
+  fontSize: '2.5rem',
+  fontWeight: '700',
+  color: '#667eea',
+  marginBottom: '10px',
+  wordWrap: 'break-word'
+};
+
+const statDesc = {
+  fontSize: '1.1rem',
+  color: '#666',
+  fontWeight: '500',
+  wordWrap: 'break-word'
+};
+
+// ========================
+// DESKTOP MEDIA QUERIES
+// ========================
+
+// Add CSS for desktop
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (min-width: 768px) {
+      /* Hero improvements */
+      [data-hero-title] { font-size: 3rem !important; }
+      [data-hero-subtitle] { font-size: 1.3rem !important; }
+      
+      /* Search row layout */
+      [data-search-form] { 
+        flex-direction: row !important; 
+        max-width: 600px !important;
+      }
+      [data-search-input] { 
+        border-radius: 8px 0 0 8px !important; 
+        width: 70% !important;
+      }
+      [data-search-button] { 
+        border-radius: 0 8px 8px 0 !important; 
+        width: 30% !important;
+      }
+      
+      /* Buttons row */
+      [data-cta-buttons] { 
+        flex-direction: row !important; 
+        max-width: 400px !important;
+      }
+      [data-primary-btn], [data-secondary-btn] { 
+        width: auto !important;
+        flex: 1 !important;
+      }
+      
+      /* Stats row */
+      [data-stats-row] { 
+        flex-direction: row !important; 
+        max-width: 600px !important;
+        gap: 50px !important;
+      }
+      [data-stat-number] { font-size: 2.5rem !important; }
+      
+      /* Trust grid */
+      [data-stats-grid] { 
+        grid-template-columns: repeat(4, 1fr) !important; 
+        gap: 40px !important;
+      }
+      [data-big-number] { font-size: 3rem !important; }
+    }
+
+    @media (min-width: 1024px) {
+      [data-hero-section] { 
+        padding: 80px 20px !important; 
+        min-height: 80vh !important;
+      }
+      [data-trust-section] { 
+        padding: 80px 20px !important; 
+      }
+    }
+
+    /* GLOBAL FIX FOR ALL IMAGES */
+    img, [class*="image"], [class*="img"] {
+      max-width: 100% !important;
+      height: auto !important;
+      display: block !important;
+    }
+
+    /* FIX FOR PRODUCT CARDS */
+    [class*="card"], [class*="product"], [class*="item"] {
+      max-width: 100% !important;
+      box-sizing: border-box !important;
+    }
+  `;
+  document.head.appendChild(style);
+
+  // Add data attributes for targeting
+  setTimeout(() => {
+    const elementsToTag = {
+      '[data-hero-title]': document.querySelector('[style*="fontSize: 2rem"]'),
+      '[data-hero-subtitle]': document.querySelector('[style*="fontSize: 1.1rem"]'),
+      '[data-search-form]': document.querySelector('[style*="flexDirection: column"]'),
+      '[data-search-input]': document.querySelector('[style*="padding: 15px 20px"]'),
+      '[data-search-button]': document.querySelector('[style*="background: #ff6b35"]'),
+      '[data-cta-buttons]': document.querySelector('[style*="flexDirection: column"]'),
+      '[data-primary-btn]': document.querySelector('[style*="background: #ff6b35"]'),
+      '[data-secondary-btn]': document.querySelector('[style*="border: 2px solid white"]'),
+      '[data-stats-row]': document.querySelector('[style*="flexDirection: column"]'),
+      '[data-stat-number]': document.querySelectorAll('[style*="fontSize: 2rem"]'),
+      '[data-stats-grid]': document.querySelector('[style*="gridTemplateColumns: 1fr"]'),
+      '[data-big-number]': document.querySelectorAll('[style*="fontSize: 2.5rem"]'),
+      '[data-hero-section]': document.querySelector('[style*="background: linear-gradient"]'),
+      '[data-trust-section]': document.querySelector('[style*="background: #f8f9fa"]')
+    };
+
+    Object.keys(elementsToTag).forEach(selector => {
+      const element = elementsToTag[selector];
+      if (element) {
+        const attr = selector.replace('[', '').replace(']', '');
+        if (typeof element.forEach === 'function') {
+          element.forEach(el => el.setAttribute(attr, 'true'));
+        } else {
+          element.setAttribute(attr, 'true');
+        }
+      }
+    });
+  }, 100);
+}
 
 export default Home;
