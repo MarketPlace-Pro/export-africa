@@ -1,27 +1,27 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AppDataProvider } from './AppDataContext.js';
 import Header from './components/Header';
-import Home from './Home';  // FIXED: Regular import instead of lazy
-import './App.css';
+import Footer from './components/Footer';
+import { AppDataProvider } from './AppDataContext.js';
 
-// Lazy load other components for better performance
+// Lazy load pages for better performance
+const Home = lazy(() => import('./Home'));
 const Products = lazy(() => import('./Products'));
+const Suppliers = lazy(() => import('./Suppliers'));
+const SupplierApplication = lazy(() => import('./SupplierApplication'));
+const BuyerRequest = lazy(() => import('./BuyerRequest'));
 const Blog = lazy(() => import('./Blog'));
 const About = lazy(() => import('./About'));
-const Cart = lazy(() => import('./Cart'));
-const Suppliers = lazy(() => import('./Suppliers'));
-const BuyRequests = lazy(() => import('./BuyRequests'));
+const ContactForm = lazy(() => import('./ContactForm'));
 
-// Loading component
-const LoadingSpinner = () => (
-  <div style={{
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    height: '50vh',
-    fontSize: '1.2rem',
-    color: '#2E8B57'
+// Simple loading component
+const SimpleLoading = () => (
+  <div style={{ 
+    display: 'flex', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+    height: '200px',
+    flexDirection: 'column'
   }}>
     <div style={{
       width: '40px',
@@ -29,10 +29,18 @@ const LoadingSpinner = () => (
       border: '4px solid #f3f3f3',
       borderTop: '4px solid #2E8B57',
       borderRadius: '50%',
-      animation: 'spin 1s linear infinite',
-      marginRight: '15px'
+      animation: 'spin 1s linear infinite'
     }}></div>
-    Loading AfriTrade Export...
+    <p style={{ marginTop: '20px', color: '#666' }}>Loading...</p>
+    
+    <style>
+      {`
+        @keyframes spin {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+      `}
+    </style>
   </div>
 );
 
@@ -43,20 +51,20 @@ function App() {
         <div className="App">
           <Header />
           <main>
-            <Suspense fallback={<LoadingSpinner />}>
+            <Suspense fallback={<SimpleLoading />}>
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/products" element={<Products />} />
+                <Route path="/suppliers" element={<Suppliers />} />
+                <Route path="/supplier-application" element={<SupplierApplication />} />
+                <Route path="/buyer-request" element={<BuyerRequest />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/about" element={<About />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/suppliers" element={<Suppliers />} />
-                <Route path="/buy-requests" element={<BuyRequests />} />
-                <Route path="/products/:category" element={<Products />} />
-                <Route path="/blog/:postId" element={<Blog />} />
+                <Route path="/contact" element={<ContactForm />} />
               </Routes>
             </Suspense>
           </main>
+          <Footer />
         </div>
       </Router>
     </AppDataProvider>
