@@ -1,3 +1,4 @@
+import StructuredData from "./components/StructuredData";
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AppDataProvider } from './AppDataContext.js';
@@ -40,6 +41,7 @@ function App() {
   return (
     <AppDataProvider>
       <Router>
+<StructuredData />
         <div className="App">
           <Header />
           <main>
