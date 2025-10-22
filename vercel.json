@@ -1,12 +1,13 @@
 {
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://verselagritrades.vercel.app/$1",
+      "permanent": true
+    }
+  ],
   "env": {
     "REACT_APP_SUPABASE_URL": "https://clonibsinwgohqezakzn.supabase.co",
     "REACT_APP_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNsb25pYnNpbndnb2hxZXpha3puIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5Mjg2MjcsImV4cCI6MjAxNzUwNDYyN30.8a3QvO1BBrMw5wFc0OBdJdL_wNnG7L7d8n7J8q9q9q9"
-  },
-  "build": {
-    "env": {
-      "REACT_APP_SUPABASE_URL": "https://clonibsinwgohqezakzn.supabase.co",
-      "REACT_APP_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNsb25pYnNpbndnb2hxZXpha3puIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDE5Mjg2MjcsImV4cCI6MjAxNzUwNDYyN30.8a3QvO1BBrMw5wFc0OBdJdL_wNnG7L7d8n7J8q9q9q9"
-    }
   }
 }
